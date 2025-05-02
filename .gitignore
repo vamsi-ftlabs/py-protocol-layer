@@ -190,3 +190,5 @@ terraform.rc
 
 *venv
 *.swp
+
+data/
