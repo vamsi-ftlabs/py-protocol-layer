@@ -21,8 +21,8 @@ ondc_network_namespace = Namespace('ondc_network', description='ONDC Network Nam
 @ondc_network_namespace.route("/v1/on_search")
 class GatewayOnSearch(Resource):
 
-    @MeasureTime
-    @validate_auth_header
+    # @MeasureTime
+    # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         # validate schema based on context version
@@ -60,7 +60,7 @@ class GatewayOnSearch(Resource):
 @ondc_network_namespace.route("/v1/on_select")
 class AddSelectResponse(Resource):
 
-    @validate_auth_header
+    # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         log(f"Got the on_select request payload {request_payload} \n headers: {dict(request.headers)}!")
@@ -77,7 +77,7 @@ class AddSelectResponse(Resource):
 @ondc_network_namespace.route("/v1/on_init")
 class AddInitResponse(Resource):
 
-    @validate_auth_header
+    # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         log(f"Got the on_init request payload {request_payload} \n headers: {dict(request.headers)}!")
@@ -94,7 +94,7 @@ class AddInitResponse(Resource):
 @ondc_network_namespace.route("/v1/on_confirm")
 class AddConfirmResponse(Resource):
 
-    @validate_auth_header
+    # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         log(f"Got the on_confirm request payload {request_payload} \n headers: {dict(request.headers)}!")
@@ -111,7 +111,7 @@ class AddConfirmResponse(Resource):
 @ondc_network_namespace.route("/v1/on_cancel")
 class AddCancelResponse(Resource):
 
-    @validate_auth_header
+    # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         log(f"Got the on_cancel request payload {request_payload} \n headers: {dict(request.headers)}!")
@@ -127,7 +127,7 @@ class AddCancelResponse(Resource):
 @ondc_network_namespace.route("/v1/cancellation_reasons")
 class AddCancellationReasonsResponse(Resource):
 
-    @validate_auth_header
+    # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         log(f"Got the cancellation_reasons request payload {request_payload} \n headers: {dict(request.headers)}!")
@@ -146,7 +146,7 @@ class AddCancellationReasonsResponse(Resource):
 @ondc_network_namespace.route("/v1/on_issue")
 class AddIssueResponse(Resource):
 
-    @validate_auth_header
+    # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         log(f"Got the on_issue request payload {request_payload} \n headers: {dict(request.headers)}!")
@@ -162,7 +162,7 @@ class AddIssueResponse(Resource):
 @ondc_network_namespace.route("/v1/on_issue_status")
 class AddIssueStatusResponse(Resource):
 
-    @validate_auth_header
+    # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         log(f"Got the on_issue_status request payload {request_payload} \n headers: {dict(request.headers)}!")
@@ -178,7 +178,7 @@ class AddIssueStatusResponse(Resource):
 @ondc_network_namespace.route("/v1/on_rating")
 class AddRatingResponse(Resource):
 
-    @validate_auth_header
+    # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         log(f"Got the on_rating request payload {request_payload} \n headers: {dict(request.headers)}!")
@@ -194,7 +194,7 @@ class AddRatingResponse(Resource):
 @ondc_network_namespace.route("/v1/on_status")
 class AddStatusResponse(Resource):
 
-    @validate_auth_header
+    # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         log(f"Got the on_status request payload {request_payload} \n headers: {dict(request.headers)}!")
@@ -210,7 +210,7 @@ class AddStatusResponse(Resource):
 @ondc_network_namespace.route("/v1/on_support")
 class AddSupportResponse(Resource):
 
-    @validate_auth_header
+    # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         log(f"Got the on_support request payload {request_payload} \n headers: {dict(request.headers)}!")
@@ -226,7 +226,7 @@ class AddSupportResponse(Resource):
 @ondc_network_namespace.route("/v1/on_track")
 class AddTrackResponse(Resource):
 
-    @validate_auth_header
+    # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         log(f"Got the on_track request payload {request_payload} \n headers: {dict(request.headers)}!")
@@ -242,7 +242,7 @@ class AddTrackResponse(Resource):
 @ondc_network_namespace.route("/v1/on_update")
 class AddUpdateResponse(Resource):
 
-    @validate_auth_header
+    # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         log(f"Got the on_update request payload {request_payload} \n headers: {dict(request.headers)}!")

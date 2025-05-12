@@ -855,6 +855,7 @@ def gateway_search(search_request, headers={}):
     log("Starting gateway search")
     request_type = 'search'
     gateway_url = fetch_subscriber_url_from_lookup(request_type, domain=search_request['context']['domain'])
+    log(f"gateway_url: {gateway_url}")
     search_url = f"{gateway_url}{request_type}" if gateway_url.endswith("/") else f"{gateway_url}/{request_type}"
     auth_header = create_authorisation_header(search_request)
     log(f"making request to bg or bpp with {search_request}")
