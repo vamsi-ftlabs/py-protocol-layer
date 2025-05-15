@@ -13,19 +13,16 @@ from main.service.search import gateway_search
 
 
 def make_http_requests_for_search_by_city(search_type: SearchType, domains=None, cities=None, mode="start"):
-    log(f"Starting catalog {search_type.value} operation with mode: {mode}")
     search_payload_list = []
     domain_list = get_config_by_name("DOMAIN_LIST") if domains is None else domains
     end_time = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
     start_time = (datetime.utcnow() - timedelta(days=1)).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
-    log(f"Catalog refresh time range: {start_time} to {end_time}")
     payment_object = {
         "@ondc/org/buyer_app_finder_fee_type": get_config_by_name("BAP_FINDER_FEE_TYPE"),
         "@ondc/org/buyer_app_finder_fee_amount": get_config_by_name("BAP_FINDER_FEE_AMOUNT")
     }
     if search_type == SearchType.FULL:
         city_list = get_config_by_name("CITY_LIST") if cities is None else cities
-        log(f"Full catalog refresh for domains: {domain_list} and cities: {city_list}")
         message = {
             "intent": {
                 "fulfillment":
@@ -37,7 +34,6 @@ def make_http_requests_for_search_by_city(search_type: SearchType, domains=None,
         }
     else:
         city_list = ["*"] if cities is None else cities
-        log(f"Incremental catalog refresh for domains: {domain_list} and cities: {city_list}")
         if mode == "start_and_stop":
             message = {
                 "intent":
@@ -99,7 +95,7 @@ def make_http_requests_for_search_by_city(search_type: SearchType, domains=None,
                     "city": c,
                     "core_version": "1.2.0",
                     "bap_id": get_config_by_name("BAP_ID"),
-                    "bap_uri": get_config_by_name("BAP_URL") + "/protocol/v1",
+                    "bap_uri": get_config_by_name("BAP_URL"),
                     "transaction_id": transaction_id,
                     "message_id": str(uuid.uuid4()),
                     "timestamp": end_time,
@@ -109,10 +105,8 @@ def make_http_requests_for_search_by_city(search_type: SearchType, domains=None,
             }
             search_payload_list.append(search_payload)
     
-    log(f"Created {len(search_payload_list)} search requests for catalog refresh")
 
     for index, x in enumerate(search_payload_list):
-        log(f"Processing catalog refresh request {index + 1}/{len(search_payload_list)} for domain: {x['context']['domain']}, city: {x['context']['city']}")
         dump_request_and_make_gateway_search(search_type, x)
         time.sleep(1)
     
@@ -120,7 +114,6 @@ def make_http_requests_for_search_by_city(search_type: SearchType, domains=None,
 
 
 def get_transaction_id_of_last_start(domain, city):
-    log(f"Getting last transaction ID for domain: {domain}, city: {city}")
     search_collection = get_mongo_collection('request_dump')
     query_object = {"action": "search", "request.context.domain": domain, "request.context.city": city,
                     "request.message.intent.tags.list.value": "start"}
@@ -133,7 +126,6 @@ def get_transaction_id_of_last_start(domain, city):
 
 
 def dump_request_and_make_gateway_search(search_type, search_payload):
-    log(f"Sending catalog search request for domain: {search_payload['context']['domain']}, transaction_id: {search_payload['context']['transaction_id']}")
     headers = {'X-ONDC-Search-Response': search_type.value}
     entry_object_id = dump_request_payload("search", search_payload)
     resp = gateway_search(search_payload, headers)
@@ -155,18 +147,13 @@ def make_incremental_catalog_search_requests(domains=None, cities=None, mode="st
 
 def make_search_operation_along_with_incremental():
     timestamp = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
-    log(f"=== CATALOG REFRESH STARTED AT {timestamp} ===")
-    log("First stopping any existing incremental refresh")
     make_incremental_catalog_search_requests(mode="stop")
-    log("Now starting a new incremental refresh")
     make_incremental_catalog_search_requests(mode="start")
     timestamp = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
-    log(f"=== CATALOG REFRESH COMPLETED AT {timestamp} ===")
 
 
 def run_cron_for_search_catalog(full_or_inc):
-    timestamp = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
-    log(f'Running cron for {full_or_inc} catalog at {timestamp}')
+    log(f'Running cron for {full_or_inc} catalog')
     if full_or_inc == "full":
         make_full_catalog_search_requests()
     elif full_or_inc == "inc":

@@ -5,8 +5,7 @@ import os
 from datetime import timedelta
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-all_domains_str = "ONDC:RET10,ONDC:RET11,ONDC:RET12,ONDC:RET13,ONDC:RET14,ONDC:RET15,ONDC:RET16,ONDC:RET17,ONDC:RET18" \
-                  ",ONDC:RET19,ONDC:RET20,ONDC:AGR10"
+all_domains_str = "ONDC:RET10,ONDC:RET11"
 all_cities_str = "std:06274,std:0451,std:0120,std:0512,std:05842,std:0522,std:06243,std:04286,std:05547,std:0474," \
                  "std:0121,std:04266,std:04142,std:0551,std:0124,std:0591,std:0364,std:04254,std:079,std:0129," \
                  "std:06152,std:08922,std:04362,std:05263,std:0261,std:0487,std:08252,std:01342,std:0832217," \
