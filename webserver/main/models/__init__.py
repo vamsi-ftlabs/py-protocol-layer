@@ -21,9 +21,9 @@ def init_database():
     database_name = get_config_by_name('MONGO_DATABASE_NAME')
     mongo_client = MongoClient(database_url)
     mongo_db = mongo_client[database_name]
-    log(f"Connection string to database is {database_url}!")
+    # log(f"Connection string to database is {database_url}!")
     create_all_indexes()
-    log(f"Created indexes if not already present!")
+    # log(f"Created indexes if not already present!")
 
 
 def create_all_indexes():

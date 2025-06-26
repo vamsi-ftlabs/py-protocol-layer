@@ -110,7 +110,7 @@ def make_http_requests_for_search_by_city(search_type: SearchType, domains=None,
         dump_request_and_make_gateway_search(search_type, x)
         time.sleep(1)
     
-    log(f"Completed catalog {search_type.value} operation with mode: {mode}")
+    # log(f"Completed catalog {search_type.value} operation with mode: {mode}")
 
 
 def get_transaction_id_of_last_start(domain, city):
@@ -130,19 +130,19 @@ def dump_request_and_make_gateway_search(search_type, search_payload):
     entry_object_id = dump_request_payload("search", search_payload)
     resp = gateway_search(search_payload, headers)
     update_dumped_request_with_response(entry_object_id, resp)
-    log(f"Completed catalog search request for domain: {search_payload['context']['domain']}, transaction_id: {search_payload['context']['transaction_id']}")
+    # log(f"Completed catalog search request for domain: {search_payload['context']['domain']}, transaction_id: {search_payload['context']['transaction_id']}")
 
 
 def make_full_catalog_search_requests(domains=None, cities=None):
-    log("Starting FULL catalog refresh")
+    # log("Starting FULL catalog refresh")
     make_http_requests_for_search_by_city(SearchType.FULL, domains=domains, cities=cities)
-    log("Completed FULL catalog refresh")
+    # log("Completed FULL catalog refresh")
 
 
 def make_incremental_catalog_search_requests(domains=None, cities=None, mode="start"):
-    log(f"Starting INCREMENTAL catalog refresh with mode: {mode}")
+    # log(f"Starting INCREMENTAL catalog refresh with mode: {mode}")
     make_http_requests_for_search_by_city(SearchType.INC, domains, cities, mode)
-    log(f"Completed INCREMENTAL catalog refresh with mode: {mode}")
+    # log(f"Completed INCREMENTAL catalog refresh with mode: {mode}")
 
 
 def make_search_operation_along_with_incremental():
@@ -153,7 +153,7 @@ def make_search_operation_along_with_incremental():
 
 
 def run_cron_for_search_catalog(full_or_inc):
-    log(f'Running cron for {full_or_inc} catalog')
+    # log(f'Running cron for {full_or_inc} catalog')
     if full_or_inc == "full":
         make_full_catalog_search_requests()
     elif full_or_inc == "inc":

@@ -41,7 +41,7 @@ def collection_upsert_one_on_id(mongo_collection, data):
 def collection_upsert_many(mongo_collection, filter_criteria_list, update_data_list):
     try:
         mongo_collection.update_many({'$or': filter_criteria_list}, {'$set': update_data_list}, upsert=True)
-        log(f"Entries upserted to collection {mongo_collection.name} successfully!")
+        # log(f"Entries upserted to collection {mongo_collection.name} successfully!")
         return True
     except:
         log_error(f"Entries upsertion to collection {mongo_collection.name} failed!")
@@ -52,7 +52,7 @@ def collection_upsert_many(mongo_collection, filter_criteria_list, update_data_l
 def collection_insert_many(mongo_collection, entries):
     try:
         mongo_collection.insert_many(entries)
-        log(f"Entries inserted to collection {mongo_collection.name} successfully!")
+        # log(f"Entries inserted to collection {mongo_collection.name} successfully!")
         return True
     except:
         log_error(f"Entries insertion to collection {mongo_collection.name} failed!")
@@ -63,7 +63,7 @@ def collection_insert_many(mongo_collection, entries):
 def collection_find_all(mongo_collection, query_object, sort_field=None, sort_order=pymongo.ASCENDING,
                         skip=0, limit=50, geo_spatial=False):
     try:
-        log(f"Getting entries from collection {mongo_collection.name}")
+        # log(f"Getting entries from collection {mongo_collection.name}")
         if mongo_collection.name == "on_search_items":
             catalogue_objects = mongo_collection.find(query_object, {"categories": 0, "providers": 0, "locations": 0,
                                                                      "fulfillments": 0})
@@ -86,7 +86,7 @@ def collection_find_all(mongo_collection, query_object, sort_field=None, sort_or
             c.pop('_id')
             c.pop('created_at', None)
             c.pop('updated_at', None)
-        log(f"Got entries from collection {mongo_collection.name} successfully")
+        # log(f"Got entries from collection {mongo_collection.name} successfully")
         return {'count': count, 'data': catalogues, "pages": ((count-1)//limit)+1}
     except:
         log_error(f"Getting Entries for collection {mongo_collection.name} failed!")
@@ -96,7 +96,7 @@ def collection_find_all(mongo_collection, query_object, sort_field=None, sort_or
 # @MeasureTime
 def collection_find_distinct(mongo_collection, query_object, distinct=None):
     try:
-        log(f"Getting distinct entries from collection {mongo_collection.name}")
+        # log(f"Getting distinct entries from collection {mongo_collection.name}")
         catalogue_objects = mongo_collection.find(query_object)
         if distinct:
             catalogue_objects = catalogue_objects.distinct(distinct)

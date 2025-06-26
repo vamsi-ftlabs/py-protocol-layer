@@ -41,7 +41,7 @@ class GatewayOnSearch(Resource):
                     "doc_id": str(doc_id),
                     "request_type": request_type,
                 }
-                log(f"message in on_search: {message}")
+                # #log(f"message in on_search: {message}")
                 send_message_to_queue_for_given_request(message) if get_config_by_name('QUEUE_ENABLE') else None
                 send_message_to_elastic_search_queue(message) if get_config_by_name('ELASTIC_SEARCH_QUEUE_ENABLE') else None
             return get_ack_response(request_payload[constant.CONTEXT], ack=True), 200
@@ -64,14 +64,14 @@ class AddSelectResponse(Resource):
     # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        log(f"Got the on_select request payload {request_payload} \n headers: {dict(request.headers)}!")
+        #log(f"Got the on_select request payload {request_payload} \n headers: {dict(request.headers)}!")
         resp = validate_payload_schema_based_on_version(request_payload, 'on_select')
         # resp = validate_business_rules(request_payload, 'on_select') if resp is None else resp
         entry_object_id = dump_request_payload("on_select", request_payload)
         if resp is None:
             resp = add_bpp_response(request_payload, request_type="on_select"), 200
         update_dumped_request_with_response(entry_object_id, resp)
-        log(f"Got the on_select response {resp}!")
+        #log(f"Got the on_select response {resp}!")
         return resp
 
 
@@ -81,14 +81,14 @@ class AddInitResponse(Resource):
     # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        log(f"Got the on_init request payload {request_payload} \n headers: {dict(request.headers)}!")
+        #log(f"Got the on_init request payload {request_payload} \n headers: {dict(request.headers)}!")
         resp = validate_payload_schema_based_on_version(request_payload, 'on_init')
         resp = validate_business_rules(request_payload, 'on_init') if resp is None else resp
         entry_object_id = dump_request_payload("on_init", request_payload)
         if resp is None:
             resp = add_bpp_response(request_payload, request_type="on_init"), 200
         update_dumped_request_with_response(entry_object_id, resp)
-        log(f"Got the on_init response {resp}!")
+        #log(f"Got the on_init response {resp}!")
         return resp
 
 
@@ -98,14 +98,14 @@ class AddConfirmResponse(Resource):
     # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        log(f"Got the on_confirm request payload {request_payload} \n headers: {dict(request.headers)}!")
+        #log(f"Got the on_confirm request payload {request_payload} \n headers: {dict(request.headers)}!")
         resp = validate_payload_schema_based_on_version(request_payload, 'on_confirm')
         resp = validate_business_rules(request_payload, 'on_confirm') if resp is None else resp
         entry_object_id = dump_request_payload("on_confirm", request_payload)
         if resp is None:
             resp = add_bpp_response(request_payload, request_type="on_confirm"), 200
         update_dumped_request_with_response(entry_object_id, resp)
-        log(f"Got the on_confirm response {resp}!")
+        #log(f"Got the on_confirm response {resp}!")
         return resp
 
 
@@ -115,13 +115,13 @@ class AddCancelResponse(Resource):
     # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        log(f"Got the on_cancel request payload {request_payload} \n headers: {dict(request.headers)}!")
+        #log(f"Got the on_cancel request payload {request_payload} \n headers: {dict(request.headers)}!")
         resp = validate_payload_schema_based_on_version(request_payload, 'on_cancel')
         entry_object_id = dump_request_payload("on_cancel", request_payload)
         if resp is None:
             resp = add_bpp_response(request_payload, request_type="on_cancel"), 200
         update_dumped_request_with_response(entry_object_id, resp)
-        log(f"Got the on_cancel response {resp}!")
+        #log(f"Got the on_cancel response {resp}!")
         return resp
 
 
@@ -131,16 +131,16 @@ class AddCancellationReasonsResponse(Resource):
     # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        log(f"Got the cancellation_reasons request payload {request_payload} \n headers: {dict(request.headers)}!")
+        #log(f"Got the cancellation_reasons request payload {request_payload} \n headers: {dict(request.headers)}!")
         resp = validate_payload_schema_based_on_version(request_payload, 'on_cancellation_reasons')
         if resp is None:
             entry_object_id = dump_request_payload("on_cancellation_reasons", request_payload)
             resp = add_bpp_response(request_payload, request_type="on_cancellation_reasons"), 200
             update_dumped_request_with_response(entry_object_id, resp)
-            log(f"Got the cancellation_reasons response {resp}!")
+            #log(f"Got the cancellation_reasons response {resp}!")
             return resp
         else:
-            log(f"Got the cancellation_reasons response {resp}!")
+            #log(f"Got the cancellation_reasons response {resp}!")
             return resp
 
 
@@ -150,13 +150,13 @@ class AddIssueResponse(Resource):
     # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        log(f"Got the on_issue request payload {request_payload} \n headers: {dict(request.headers)}!")
+        #log(f"Got the on_issue request payload {request_payload} \n headers: {dict(request.headers)}!")
         resp = validate_payload_schema_based_on_version(request_payload, 'on_issue')
         entry_object_id = dump_request_payload("on_issue", request_payload)
         if resp is None:
             resp = add_bpp_response(request_payload, request_type="on_issue"), 200
         update_dumped_request_with_response(entry_object_id, resp)
-        log(f"Got the on_issue response {resp}!")
+        #log(f"Got the on_issue response {resp}!")
         return resp
 
 
@@ -166,13 +166,13 @@ class AddIssueStatusResponse(Resource):
     # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        log(f"Got the on_issue_status request payload {request_payload} \n headers: {dict(request.headers)}!")
+        #log(f"Got the on_issue_status request payload {request_payload} \n headers: {dict(request.headers)}!")
         resp = validate_payload_schema_based_on_version(request_payload, 'on_issue_status')
         entry_object_id = dump_request_payload("on_issue_status", request_payload)
         if resp is None:
             resp = add_bpp_response(request_payload, request_type="on_issue_status"), 200
         update_dumped_request_with_response(entry_object_id, resp)
-        log(f"Got the on_issue_status response {resp}!")
+        #log(f"Got the on_issue_status response {resp}!")
         return resp
 
 
@@ -182,13 +182,13 @@ class AddRatingResponse(Resource):
     # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        log(f"Got the on_rating request payload {request_payload} \n headers: {dict(request.headers)}!")
+        #log(f"Got the on_rating request payload {request_payload} \n headers: {dict(request.headers)}!")
         resp = validate_payload_schema_based_on_version(request_payload, 'on_rating')
         entry_object_id = dump_request_payload("on_rating", request_payload)
         if resp is None:
             resp = add_bpp_response(request_payload, request_type="on_rating"), 200
         update_dumped_request_with_response(entry_object_id, resp)
-        log(f"Got the on_rating response {resp}!")
+        #log(f"Got the on_rating response {resp}!")
         return resp
 
 
@@ -198,13 +198,13 @@ class AddStatusResponse(Resource):
     # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        log(f"Got the on_status request payload {request_payload} \n headers: {dict(request.headers)}!")
+        #log(f"Got the on_status request payload {request_payload} \n headers: {dict(request.headers)}!")
         resp = validate_payload_schema_based_on_version(request_payload, 'on_status')
         entry_object_id = dump_request_payload("on_status", request_payload)
         if resp is None:
             resp = add_bpp_response(request_payload, request_type="on_status"), 200
         update_dumped_request_with_response(entry_object_id, resp)
-        log(f"Got the on_status response {resp}!")
+        #log(f"Got the on_status response {resp}!")
         return resp
 
 
@@ -214,13 +214,13 @@ class AddSupportResponse(Resource):
     # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        log(f"Got the on_support request payload {request_payload} \n headers: {dict(request.headers)}!")
+        #log(f"Got the on_support request payload {request_payload} \n headers: {dict(request.headers)}!")
         resp = validate_payload_schema_based_on_version(request_payload, 'on_support')
         entry_object_id = dump_request_payload("on_support", request_payload)
         if resp is None:
             resp = add_bpp_response(request_payload, request_type="on_support"), 200
         update_dumped_request_with_response(entry_object_id, resp)
-        log(f"Got the on_support response {resp}!")
+        #log(f"Got the on_support response {resp}!")
         return resp
 
 
@@ -230,13 +230,13 @@ class AddTrackResponse(Resource):
     # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        log(f"Got the on_track request payload {request_payload} \n headers: {dict(request.headers)}!")
+        #log(f"Got the on_track request payload {request_payload} \n headers: {dict(request.headers)}!")
         resp = validate_payload_schema_based_on_version(request_payload, 'on_track')
         entry_object_id = dump_request_payload("on_track", request_payload)
         if resp is None:
             resp = add_bpp_response(request_payload, request_type="on_track"), 200
         update_dumped_request_with_response(entry_object_id, resp)
-        log(f"Got the on_track response {resp}!")
+        #log(f"Got the on_track response {resp}!")
         return resp
 
 
@@ -246,11 +246,11 @@ class AddUpdateResponse(Resource):
     # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        log(f"Got the on_update request payload {request_payload} \n headers: {dict(request.headers)}!")
+        #log(f"Got the on_update request payload {request_payload} \n headers: {dict(request.headers)}!")
         resp = validate_payload_schema_based_on_version(request_payload, 'on_update')
         entry_object_id = dump_request_payload("on_update", request_payload)
         if resp is None:
             resp = add_bpp_response(request_payload, request_type="on_update"), 200
         update_dumped_request_with_response(entry_object_id, resp)
-        log(f"Got the on_update response {resp}!")
+        #log(f"Got the on_update response {resp}!")
         return resp
