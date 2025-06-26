@@ -59,7 +59,7 @@ def MeasureTime(f):
             elapsed = timeit.default_timer() - start_time
             if gcold:
                 gc.enable()
-            log('[{}]Function "{}": {}s'.format(datetime.datetime.now(), f.__name__, elapsed))
+            # log('[{}]Function "{}": {}s'.format(datetime.datetime.now(), f.__name__, elapsed))
         return result
 
     return _wrapper

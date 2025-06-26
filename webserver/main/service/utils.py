@@ -57,7 +57,7 @@ def handle_stop_iteration(func):
         try:
             return func(*args, **kwargs)
         except StopIteration:
-            log(f"element not found with {args} and {kwargs}")
+            # log(f"element not found with {args} and {kwargs}")
             abort(message="Failed while querying and updating SQL server")
 
     return exception_handler

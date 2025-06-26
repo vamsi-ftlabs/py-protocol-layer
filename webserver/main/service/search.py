@@ -717,7 +717,7 @@ def upsert_sub_categories(sub_categories: List[SubCategory]):
 @check_for_exception
 @MeasureTime
 def add_search_catalogues(bpp_response):
-    log(f"Adding search catalogs with message-id: {bpp_response['context']['message_id']} for {bpp_response['context']['bpp_id']}")
+    # log(f"Adding search catalogs with message-id: {bpp_response['context']['message_id']} for {bpp_response['context']['bpp_id']}")
     context = bpp_response[constant.CONTEXT]
     if constant.MESSAGE not in bpp_response:
         return get_ack_response(context=context, ack=False, error=RegistryLookupError.REGISTRY_ERROR.value)
@@ -738,12 +738,12 @@ def add_search_catalogues(bpp_response):
 
     io_bound_parallel_computation(upsert_single_item, items)
 
-    log(f"Search catalogs added successfully, message-id: {bpp_response['context']['message_id']} for {bpp_response['context']['bpp_id']}")
+    # log(f"Search catalogs added successfully, message-id: {bpp_response['context']['message_id']} for {bpp_response['context']['bpp_id']}")
     return get_ack_response(context=context, ack=True)
 
 
 def add_search_catalogues_for_test(bpp_response):
-    log(f"Adding search catalogs(for test) with message-id: {bpp_response['context']['message_id']} for {bpp_response['context']['bpp_id']}")
+    # log(f"Adding search catalogs(for test) with message-id: {bpp_response['context']['message_id']} for {bpp_response['context']['bpp_id']}")
     context = bpp_response[constant.CONTEXT]
     if constant.MESSAGE not in bpp_response:
         return get_ack_response(context=context, ack=False, error=RegistryLookupError.REGISTRY_ERROR.value)
@@ -759,7 +759,7 @@ def add_search_catalogues_for_test(bpp_response):
 
 @check_for_exception
 def add_incremental_search_catalogues(bpp_response):
-    log(f"Adding incremental search catalogs with message-id: {bpp_response['context']['message_id']} for {bpp_response['context']['bpp_id']}")
+    # log(f"Adding incremental search catalogs with message-id: {bpp_response['context']['message_id']} for {bpp_response['context']['bpp_id']}")
     catalog = bpp_response[constant.MESSAGE][constant.CATALOG]
     bpp_providers = catalog.get(constant.BPP_PROVIDERS, [])
     bpp_provider_first = bpp_providers[0]
@@ -780,7 +780,7 @@ def get_similar_existing_item(item_id, provider_id, location_id, item_type):
 
 def add_incremental_search_catalogues_for_items_update(bpp_response):
     context = bpp_response[constant.CONTEXT]
-    log(f"Adding incremental search catalog (item) update for {context['bpp_id']}")
+    # log(f"Adding incremental search catalog (item) update for {context['bpp_id']}")
     if constant.MESSAGE not in bpp_response:
         return get_ack_response(context=context, ack=False, error=RegistryLookupError.REGISTRY_ERROR.value)
     catalog = bpp_response[constant.MESSAGE][constant.CATALOG]
@@ -852,13 +852,13 @@ def add_incremental_search_catalogues_for_provider_update(bpp_response):
 
 @MeasureTime
 def gateway_search(search_request, headers={}):
-    log("Starting gateway search")
+    # log("Starting gateway search")
     request_type = 'search'
     gateway_url = fetch_subscriber_url_from_lookup(request_type, domain=search_request['context']['domain'])
-    log(f"gateway_url: {gateway_url}")
+    # log(f"gateway_url: {gateway_url}")
     search_url = f"{gateway_url}{request_type}" if gateway_url.endswith("/") else f"{gateway_url}/{request_type}"
     auth_header = create_authorisation_header(search_request)
-    log(f"making request to bg or bpp with {search_request}")
+    # log(f"making request to bg or bpp with {search_request}")
     headers.update({'Authorization': auth_header})
     return post_on_bg_or_bpp(search_url, payload=search_request, headers=headers)
 

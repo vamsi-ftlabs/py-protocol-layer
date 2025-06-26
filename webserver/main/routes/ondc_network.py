@@ -41,6 +41,7 @@ class GatewayOnSearch(Resource):
                     "doc_id": str(doc_id),
                     "request_type": request_type,
                 }
+                log(f"message in on_search: {message}")
                 send_message_to_queue_for_given_request(message) if get_config_by_name('QUEUE_ENABLE') else None
                 send_message_to_elastic_search_queue(message) if get_config_by_name('ELASTIC_SEARCH_QUEUE_ENABLE') else None
             return get_ack_response(request_payload[constant.CONTEXT], ack=True), 200

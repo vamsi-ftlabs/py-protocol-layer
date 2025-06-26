@@ -11,7 +11,7 @@ from retry import retry
 
 from main.config import get_config_by_name
 from main.utils.cryptic_utils import create_authorisation_header
-from main.logger.custom_logging import log
+from main.logger.custom_logging import log, log_error
 
 
 # Initialize cache with a TTL of 1 day (86400 seconds)
@@ -57,7 +57,7 @@ def requests_post_with_retries(url, payload, headers=None):
     response = requests.post(url, json=payload, headers=headers, timeout=3)
     status_code = response.status_code
     if status_code != 200:
-        log(f"Failed with status code {status_code} for {url}")
+        log_error(f"Failed with status code {status_code} for {url}")
         raise requests.exceptions.HTTPError("Request Failed!")
     return status_code
 
@@ -84,17 +84,17 @@ def post_count_response_to_client(route, schema_version, payload):
         status_code = 500
     except:
         status_code = 500
-    log(f"Got {status_code} for {payload} on {route}")
+    # log(f"Got {status_code} for {payload} on {route}")
     return status_code
 
 
 @MeasureTime
 def post_on_bg_or_bpp(url, payload, headers={}):
-    log(f"Making POST call for {payload['context']['message_id']} on {url}")
+    # log(f"Making POST call for {payload['context']['message_id']} on {url}")
     headers.update({'Content-Type': 'application/json'})
     raw_data = json.dumps(payload, separators=(',', ':'))
     response_text, status_code = requests_post(url, raw_data, headers=headers)
-    log(f"Request Status: {status_code}, {response_text}")
+    # log(f"Request Status: {status_code}, {response_text}")
     return json.loads(response_text), status_code
 
 
@@ -161,7 +161,7 @@ def make_request_to_no_dashboard(payload, response=False):
     action = payload.get("context", {}).get("action")
     dashboard_webhook_endpoint = get_config_by_name('NO_DASHBOARD_ENDPOINT')
     if action is None:
-        log("No action found hence not making request to NO Dashboard!")
+        # log("No action found hence not making request to NO Dashboard!")
         return
 
     data_type = f"{action}_response" if response else action
@@ -183,5 +183,5 @@ def make_request_to_no_dashboard(payload, response=False):
         status_code = 500
     except:
         status_code = 500
-    log(f"Got {status_code} response for {data_type}!")
+    # log(f"Got {status_code} response for {data_type}!")
     return status_code

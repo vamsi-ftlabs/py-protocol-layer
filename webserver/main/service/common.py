@@ -17,8 +17,8 @@ from main.service.utils import calculate_duration_ms, is_on_issue_deadine
 
 
 def add_bpp_response(bpp_response, request_type):
-    log(f"Received {request_type} call of {bpp_response['context']['message_id']} "
-        f"for {bpp_response['context']['bpp_id']}")
+    # log(f"Received {request_type} call of {bpp_response['context']['message_id']} "
+    #     f"for {bpp_response['context']['bpp_id']}")
     collection_name = get_mongo_collection(request_type)
     bpp_response["created_at"] = datetime.utcnow()
     is_successful = mongo.collection_insert_one(collection_name, bpp_response)

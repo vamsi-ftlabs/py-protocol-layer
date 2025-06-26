@@ -17,7 +17,7 @@ def send_message_to_queue_for_given_request(payload, properties=None):
                                                                                             rabbitmq_channel)
     queue_name = get_config_by_name('RABBITMQ_QUEUE_NAME')
     declare_queue(rabbitmq_channel, queue_name)
-    log(f"Sending message with payload : {payload} to {queue_name}")
+    # log(f"Sending message with payload : {payload} to {queue_name}")
     publish_message_to_queue(rabbitmq_channel, exchange='', routing_key=queue_name, body=json.dumps(payload),
                              properties=properties)
 
@@ -29,7 +29,7 @@ def send_message_to_elastic_search_queue(payload, properties=None):
                                                                                             rabbitmq_channel)
     queue_name = get_config_by_name('ELASTIC_SEARCH_QUEUE_NAME')
     declare_queue(rabbitmq_channel, queue_name)
-    log(f"Sending message with payload : {payload} to {queue_name}")
+    # log(f"Sending message with payload : {payload} to {queue_name}")
     publish_message_to_queue(rabbitmq_channel, exchange='', routing_key=queue_name, body=json.dumps(payload),
                              properties=properties)
 
@@ -41,6 +41,6 @@ def send_message_to_nack_message_queue(payload, properties=None):
                                                                                             rabbitmq_channel)
     queue_name = get_config_by_name('NACK_MESSAGE_QUEUE_NAME')
     declare_queue(rabbitmq_channel, queue_name)
-    log(f"Sending message with payload : {payload} to {queue_name}")
+    # log(f"Sending message with payload : {payload} to {queue_name}")
     publish_message_to_queue(rabbitmq_channel, exchange='', routing_key=queue_name, body=json.dumps(payload),
                              properties=properties)

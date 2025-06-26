@@ -10,10 +10,10 @@ from main.logger.custom_logging import log, log_error
 
 def open_connection_and_channel_if_not_already_open(old_connection, old_channel):
     if old_connection and old_connection.is_open:
-        log("Getting old connection and channel")
+        # log("Getting old connection and channel")
         return old_connection, old_channel
     else:
-        log("Getting new connection and channel")
+        # log("Getting new connection and channel")
         connection = open_connection()
         channel = create_channel(connection)
         return connection, channel
@@ -56,7 +56,7 @@ def declare_queue(channel, queue_name):
 
 # @retry(3, errors=StreamLostError)
 def publish_message_to_queue(channel, exchange, routing_key, body, properties=None):
-    log(f"Publishing message of {body}")
+    # log(f"Publishing message of {body}")
     channel.basic_publish(exchange=exchange, routing_key=routing_key, body=body, properties=properties)
 
 
@@ -64,13 +64,13 @@ def consume_message(connection, channel, queue_name, consume_fn):
     def callback(ch, delivery_tag, body):
         try:
             channel.basic_ack(delivery_tag)
-            log(f"Ack message {body} !")
+            # log(f"Ack message {body} !")
         except:
             log_error(f"Something went wrong for {body} !")
 
     def do_work(delivery_tag, body):
         thread_id = threading.get_ident()
-        log(f'Thread id: {thread_id} Delivery tag: {delivery_tag} Message body: {body}')
+        # log(f'Thread id: {thread_id} Delivery tag: {delivery_tag} Message body: {body}')
         cb = functools.partial(callback, channel, delivery_tag, body)
 
         try:
@@ -96,7 +96,7 @@ def consume_message(connection, channel, queue_name, consume_fn):
     on_message_callback = functools.partial(on_message)
 
     channel.basic_consume(queue=queue_name, on_message_callback=on_message_callback, auto_ack=False)
-    log('Waiting for messages:')
+    # log('Waiting for messages:')
 
     try:
         channel.start_consuming()
