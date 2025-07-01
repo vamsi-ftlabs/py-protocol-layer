@@ -4,7 +4,7 @@ from flask_restx import Namespace, Resource
 from main import constant
 from main.business_rule_validation import validate_business_rules
 from main.config import get_config_by_name
-from main.logger.custom_logging import log
+from main.logger.custom_logging import log, log_error
 from main.models.catalog import SearchType
 from main.repository.ack_response import get_ack_response
 from main.service import send_message_to_queue_for_given_request, send_message_to_elastic_search_queue, \
@@ -81,10 +81,11 @@ class AddInitResponse(Resource):
     # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        log(f"Got the on_init request payload {request_payload} \n headers: {dict(request.headers)}!")
+        log(f"Got the on_init request payload {request_payload}")
         resp = validate_payload_schema_based_on_version(request_payload, 'on_init')
         resp = validate_business_rules(request_payload, 'on_init') if resp is None else resp
         entry_object_id = dump_request_payload("on_init", request_payload)
+        log_error(f"resp: {resp}")
         if resp is None:
             resp = add_bpp_response(request_payload, request_type="on_init"), 200
         update_dumped_request_with_response(entry_object_id, resp)
