@@ -81,7 +81,7 @@ class AddInitResponse(Resource):
     # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        #log(f"Got the on_init request payload {request_payload} \n headers: {dict(request.headers)}!")
+        log(f"Got the on_init request payload {request_payload} \n headers: {dict(request.headers)}!")
         resp = validate_payload_schema_based_on_version(request_payload, 'on_init')
         resp = validate_business_rules(request_payload, 'on_init') if resp is None else resp
         entry_object_id = dump_request_payload("on_init", request_payload)
