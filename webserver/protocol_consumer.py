@@ -22,7 +22,7 @@ def consume_fn(message_string):
         time.sleep(2)
 
         payload = json.loads(message_string)
-        log(f"Got the payload {payload}!")
+        # log(f"Got the payload {payload}!")
 
         doc_id = ObjectId(payload["doc_id"])
         collection = get_mongo_collection('on_search_dump')

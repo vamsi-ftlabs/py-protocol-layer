@@ -9,7 +9,7 @@ from main.models.catalog import SearchType
 from main.repository.ack_response import get_ack_response
 from main.service import send_message_to_queue_for_given_request, send_message_to_elastic_search_queue, \
     send_message_to_nack_message_queue
-from main.service.common import add_bpp_response, dump_request_payload, update_dumped_request_with_response
+from main.service.common import add_bpp_response, bpp_post_call_for_aarambh, dump_request_payload, update_dumped_request_with_response
 from main.service.search import dump_on_search_payload
 from main.service.utils import validate_auth_header, dump_validation_failure_request
 from main.utils.decorators import MeasureTime
@@ -109,6 +109,7 @@ class AddConfirmResponse(Resource):
         if resp is None:
             resp = add_bpp_response(request_payload, request_type="on_confirm"), 200
         update_dumped_request_with_response(entry_object_id, resp)
+        bpp_post_call_for_aarambh("create_record", request_payload, "ORDER")
         #log(f"Got the on_confirm response {resp}!")
         return resp
 
@@ -126,6 +127,7 @@ class AddCancelResponse(Resource):
             resp = add_bpp_response(request_payload, request_type="on_cancel"), 200
         update_dumped_request_with_response(entry_object_id, resp)
         #log(f"Got the on_cancel response {resp}!")
+        bpp_post_call_for_aarambh("update_record", request_payload, "ORDER_CANCEL")
         return resp
 
 
@@ -257,4 +259,5 @@ class AddUpdateResponse(Resource):
             resp = add_bpp_response(request_payload, request_type="on_update"), 200
         update_dumped_request_with_response(entry_object_id, resp)
         #log(f"Got the on_update response {resp}!")
+        bpp_post_call_for_aarambh("update_record", request_payload, "ORDER_UPDATE")
         return resp

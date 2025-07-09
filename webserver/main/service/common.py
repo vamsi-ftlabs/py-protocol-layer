@@ -10,10 +10,11 @@ from main.models.error import DatabaseError, RegistryLookupError, BaseError, IGM
 from main.repository import mongo
 from main.repository.ack_response import get_ack_response
 from main import constant
-from main.utils.cryptic_utils import create_authorisation_header
+from main.utils.cryptic_utils import create_authorisation_header, create_authorisation_header_for_aarambh
 from main.utils.lookup_utils import fetch_subscriber_url_from_lookup
 from main.utils.webhook_utils import post_count_response_to_client, post_on_bg_or_bpp
 from main.service.utils import calculate_duration_ms, is_on_issue_deadine
+from main.config import get_config_by_name
 
 
 def add_bpp_response(bpp_response, request_type):
@@ -90,6 +91,16 @@ def bpp_post_call(request_type, request_payload):
     bpp_url_with_route = f"{bpp_url}{request_type}" if bpp_url.endswith("/") else f"{bpp_url}/{request_type}"
     auth_header = create_authorisation_header(request_payload)
     return post_on_bg_or_bpp(bpp_url_with_route, payload=request_payload, headers={'Authorization': auth_header})
+
+def bpp_post_call_for_aarambh(request_type, request_payload, record_type):
+    aarambh_url = get_config_by_name("AARAMBH_URL")
+    aarambh_url_with_route = f"{aarambh_url}{request_type}" if aarambh_url.endswith("/") else f"{aarambh_url}/{request_type}"
+    auth_header = create_authorisation_header_for_aarambh(request_payload)
+    payload = {
+        "type": record_type,
+        "data": request_payload
+    }
+    return post_on_bg_or_bpp(aarambh_url_with_route, payload=payload, headers={'Authorization': auth_header})
 
 
 def dump_request_payload(action, payload):

@@ -72,6 +72,19 @@ def create_authorisation_header(request_body, created=None, expires=None):
              f'"{created}",expires="{expires}",headers="(created) (expires) digest",signature="{signature}"'
     return header
 
+def create_authorisation_header_for_aarambh(request_body, created=None, expires=None):
+    created = int(datetime.datetime.now().timestamp()) if created is None else created
+    expires = int((datetime.datetime.now() + datetime.timedelta(hours=1)).timestamp()) if expires is None else expires
+    signing_key = create_signing_string(hash_message(json.dumps(request_body, separators=(',', ':'))),
+                                        created=created, expires=expires)
+    signature = sign_response(signing_key, private_key=get_config_by_name("AARAMBH_PRIVATE_KEY"))
+
+    subscriber_id = get_config_by_name("BAP_ID")
+    unique_key_id = get_config_by_name("BAP_UNIQUE_KEY_ID")
+    header = f'Signature keyId="{subscriber_id}|{unique_key_id}|ed25519",algorithm="ed25519",created=' \
+             f'"{created}",expires="{expires}",headers="(created) (expires) digest",signature="{signature}"'
+    return header
+
 
 def verify_authorisation_header(auth_header, request_body_str, public_key=None):
     header_parts = get_filter_dictionary_or_operation(auth_header.replace("Signature ", ""))
