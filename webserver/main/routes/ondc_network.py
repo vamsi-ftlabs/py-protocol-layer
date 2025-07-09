@@ -99,6 +99,7 @@ class AddConfirmResponse(Resource):
     # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
+        aarambh_request_payload = request_payload.copy()
         #log(f"Got the on_confirm request payload {request_payload} \n headers: {dict(request.headers)}!")
         log(f"Got the on_confirm request payload {request_payload} \n headers: {dict(request.headers)}!")
         resp = validate_payload_schema_based_on_version(request_payload, 'on_confirm')
@@ -109,7 +110,7 @@ class AddConfirmResponse(Resource):
         if resp is None:
             resp = add_bpp_response(request_payload, request_type="on_confirm"), 200
         update_dumped_request_with_response(entry_object_id, resp)
-        bpp_post_call_for_aarambh("create_record", request_payload, "ORDER")
+        bpp_post_call_for_aarambh("create_record", aarambh_request_payload, "ORDER")
         log(f" completed the aarambh call!")
         #log(f"Got the on_confirm response {resp}!")
         return resp
@@ -121,6 +122,7 @@ class AddCancelResponse(Resource):
     # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
+        aarambh_request_payload = request_payload.copy()
         #log(f"Got the on_cancel request payload {request_payload} \n headers: {dict(request.headers)}!")
         resp = validate_payload_schema_based_on_version(request_payload, 'on_cancel')
         entry_object_id = dump_request_payload("on_cancel", request_payload)
@@ -128,7 +130,7 @@ class AddCancelResponse(Resource):
             resp = add_bpp_response(request_payload, request_type="on_cancel"), 200
         update_dumped_request_with_response(entry_object_id, resp)
         #log(f"Got the on_cancel response {resp}!")
-        bpp_post_call_for_aarambh("update_record", request_payload, "ORDER_CANCEL")
+        bpp_post_call_for_aarambh("update_record", aarambh_request_payload, "ORDER_CANCEL")
         log(f" completed the aarambh call!")
         return resp
 
@@ -254,6 +256,7 @@ class AddUpdateResponse(Resource):
     # @validate_auth_header
     def post(self):
         request_payload = request.get_json()
+        aarambh_request_payload = request_payload.copy()
         #log(f"Got the on_update request payload {request_payload} \n headers: {dict(request.headers)}!")
         resp = validate_payload_schema_based_on_version(request_payload, 'on_update')
         entry_object_id = dump_request_payload("on_update", request_payload)
@@ -261,6 +264,6 @@ class AddUpdateResponse(Resource):
             resp = add_bpp_response(request_payload, request_type="on_update"), 200
         update_dumped_request_with_response(entry_object_id, resp)
         #log(f"Got the on_update response {resp}!")
-        bpp_post_call_for_aarambh("update_record", request_payload, "ORDER_UPDATE")
+        bpp_post_call_for_aarambh("update_record", aarambh_request_payload, "ORDER_UPDATE")
         log(f" completed the aarambh call!")
         return resp
