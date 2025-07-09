@@ -102,7 +102,7 @@ def bpp_post_call_for_aarambh(request_type, request_payload, record_type):
         "type": record_type,
         "data": request_payload
     }
-    return post_on_bg_or_bpp(aarambh_url_with_route, payload=payload, headers={'Authorization': auth_header})
+    return post_on_bg_or_bpp(aarambh_url_with_route, payload=payload, headers={'Authorization': auth_header, 'subscriberid': get_config_by_name("BAP_ID")})
 
 
 def dump_request_payload(action, payload):
