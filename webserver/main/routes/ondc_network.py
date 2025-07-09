@@ -110,8 +110,8 @@ class AddConfirmResponse(Resource):
         if resp is None:
             resp = add_bpp_response(request_payload, request_type="on_confirm"), 200
         update_dumped_request_with_response(entry_object_id, resp)
-        bpp_post_call_for_aarambh("create_record", aarambh_request_payload, "ORDER")
-        log(f" completed the aarambh call!")
+        aarambh_response = bpp_post_call_for_aarambh("create_record", aarambh_request_payload, "ORDER")
+        log(f"aarambh_response: {aarambh_response}")
         #log(f"Got the on_confirm response {resp}!")
         return resp
 
@@ -130,8 +130,8 @@ class AddCancelResponse(Resource):
             resp = add_bpp_response(request_payload, request_type="on_cancel"), 200
         update_dumped_request_with_response(entry_object_id, resp)
         #log(f"Got the on_cancel response {resp}!")
-        bpp_post_call_for_aarambh("update_record", aarambh_request_payload, "ORDER_CANCEL")
-        log(f" completed the aarambh call!")
+        aarambh_response = bpp_post_call_for_aarambh("update_record", aarambh_request_payload, "ORDER_CANCEL")
+        log(f"aarambh_response: {aarambh_response}")
         return resp
 
 
@@ -264,6 +264,6 @@ class AddUpdateResponse(Resource):
             resp = add_bpp_response(request_payload, request_type="on_update"), 200
         update_dumped_request_with_response(entry_object_id, resp)
         #log(f"Got the on_update response {resp}!")
-        bpp_post_call_for_aarambh("update_record", aarambh_request_payload, "ORDER_UPDATE")
-        log(f" completed the aarambh call!")
+        aarambh_response = bpp_post_call_for_aarambh("update_record", aarambh_request_payload, "ORDER_UPDATE")
+        log(f"aarambh_response: {aarambh_response}")
         return resp
