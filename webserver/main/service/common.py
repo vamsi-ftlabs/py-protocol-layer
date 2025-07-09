@@ -93,6 +93,7 @@ def bpp_post_call(request_type, request_payload):
     return post_on_bg_or_bpp(bpp_url_with_route, payload=request_payload, headers={'Authorization': auth_header})
 
 def bpp_post_call_for_aarambh(request_type, request_payload, record_type):
+    log(f"Making {request_type} call for {request_payload} with record type {record_type}")
     aarambh_url = get_config_by_name("AARAMBH_URL")
     aarambh_url_with_route = f"{aarambh_url}{request_type}" if aarambh_url.endswith("/") else f"{aarambh_url}/{request_type}"
     auth_header = create_authorisation_header_for_aarambh(request_payload)
