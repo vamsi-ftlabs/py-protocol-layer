@@ -2,7 +2,7 @@ from flask import request
 from flask_restx import Namespace, Resource
 
 from main.logger.custom_logging import log
-from main.service.common import bpp_post_call, dump_request_payload, update_dumped_request_with_response
+from main.service.common import bpp_post_call, bpp_post_call_for_aarambh, dump_request_payload, update_dumped_request_with_response
 from main.service.search import gateway_search
 from main.utils.validation import validate_payload_schema_based_on_version
 from main.utils.webhook_utils import make_request_to_no_dashboard
@@ -231,6 +231,11 @@ class AddUpdateRequest(Resource):
             make_request_to_no_dashboard(request_payload)
             entry_object_id = dump_request_payload("update", request_payload)
             resp = bpp_post_call('update', request_payload)
+            if (resp[0] is not None and 
+                resp[0].message.ack.status == 'ACK' and 
+                request_payload.message.update_target == 'payment'):
+                aarambh_response = bpp_post_call_for_aarambh("update_record", request_payload, "ORDER_UPDATE")
+                log(f"aarambh_response: {aarambh_response}")
             make_request_to_no_dashboard(resp[0], response=True)
             # log(f"Got the update response {resp}!")
             update_dumped_request_with_response(entry_object_id, resp)
