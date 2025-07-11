@@ -231,8 +231,8 @@ class AddUpdateRequest(Resource):
             make_request_to_no_dashboard(request_payload)
             entry_object_id = dump_request_payload("update", request_payload)
             resp = bpp_post_call('update', request_payload)
-            log(f"resp status: {resp[0]['message']['ack']['status']}")
-            log(f"update target: {request_payload['message']['update_target']}")
+            log(f"resp status: {resp[0]['message']}")
+            log(f"update target: {request_payload['message']}")
             if (resp[0] is not None and 
                 resp[0]['message']['ack']['status'] == 'ACK' and 
                 request_payload['message']['update_target'] == 'payment'):
