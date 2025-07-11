@@ -77,7 +77,6 @@ def create_authorisation_header_for_aarambh(request_body, created=None, expires=
     expires = int((datetime.datetime.now() + datetime.timedelta(hours=1)).timestamp()) if expires is None else expires
     signing_key = create_signing_string(hash_message(json.dumps(request_body, separators=(',', ':'))),
                                         created=created, expires=expires)
-    log(f"Signing key: {signing_key}")  
     signature = sign_response(signing_key, private_key=get_config_by_name("AARAMBH_PRIVATE_KEY"))
 
     subscriber_id = get_config_by_name("BAP_ID")
