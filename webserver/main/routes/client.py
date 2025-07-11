@@ -232,8 +232,8 @@ class AddUpdateRequest(Resource):
             entry_object_id = dump_request_payload("update", request_payload)
             resp = bpp_post_call('update', request_payload)
             if (resp[0] is not None and 
-                resp[0].message.ack.status == 'ACK' and 
-                request_payload.message.update_target == 'payment'):
+                resp[0]['message']['ack']['status'] == 'ACK' and 
+                request_payload['message']['update_target'] == 'payment'):
                 aarambh_response = bpp_post_call_for_aarambh("update_record", request_payload, "ORDER_UPDATE")
                 log(f"aarambh_response: {aarambh_response}")
             make_request_to_no_dashboard(resp[0], response=True)
