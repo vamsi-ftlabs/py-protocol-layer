@@ -1,6 +1,6 @@
 import threading
 
-from flask_restx import Namespace, Resource, reqparse
+from flask_restx import Namespace, Resource, reqparse, fields
 
 from main.cron.search_by_city import make_full_catalog_search_requests, make_incremental_catalog_search_requests, \
     make_search_operation_along_with_incremental
@@ -16,14 +16,20 @@ authorizations = {
 
 cron_namespace = Namespace('cron', description='Cron Job Namespace', authorizations=authorizations)
 
+# Define input models for Swagger documentation
+search_input_model = cron_namespace.model('SearchInput', {
+    'domains': fields.List(fields.String, required=True, description='List of domains to search'),
+    'cities': fields.List(fields.String, required=True, description='List of cities to search')
+})
+
 
 @cron_namespace.route("/cron/search/full-catalog")
 class FullCatalogSearch(Resource):
 
     def create_parser_with_args(self):
         parser = reqparse.RequestParser()
-        parser.add_argument("domains", type=str, action='append')
-        parser.add_argument("cities", type=str, action='append')
+        parser.add_argument("domains", type=str, action='append', required=True, help='List of domains to search')
+        parser.add_argument("cities", type=str, action='append', required=True, help='List of cities to search')
         return parser.parse_args()
 
     def long_running_task(self, **kwargs):
@@ -31,6 +37,7 @@ class FullCatalogSearch(Resource):
         make_full_catalog_search_requests(args['domains'], args['cities'])
 
     @cron_namespace.doc(security='apikey')
+    @cron_namespace.expect(search_input_model)
     @token_required
     def post(self):
         args = self.create_parser_with_args()
@@ -46,11 +53,12 @@ class IncrementalCatalogSearch(Resource):
 
     def create_parser_with_args(self):
         parser = reqparse.RequestParser()
-        parser.add_argument("domains", type=str, action='append')
-        parser.add_argument("cities", type=str, action='append')
+        parser.add_argument("domains", type=str, action='append', required=True, help='List of domains to search')
+        parser.add_argument("cities", type=str, action='append', required=True, help='List of cities to search')
         return parser.parse_args()
 
     @cron_namespace.doc(security='apikey')
+    @cron_namespace.expect(search_input_model)
     @token_required
     def post(self):
         args = self.create_parser_with_args()
@@ -59,15 +67,16 @@ class IncrementalCatalogSearch(Resource):
 
 
 @cron_namespace.route("/cron/search/incremental-start")
-class IncrementalCatalogSearch(Resource):
+class IncrementalCatalogSearchStart(Resource):
 
     def create_parser_with_args(self):
         parser = reqparse.RequestParser()
-        parser.add_argument("domains", type=str, action='append')
-        parser.add_argument("cities", type=str, action='append')
+        parser.add_argument("domains", type=str, action='append', required=True, help='List of domains to search')
+        parser.add_argument("cities", type=str, action='append', required=True, help='List of cities to search')
         return parser.parse_args()
 
     @cron_namespace.doc(security='apikey')
+    @cron_namespace.expect(search_input_model)
     @token_required
     def post(self):
         args = self.create_parser_with_args()
@@ -76,15 +85,16 @@ class IncrementalCatalogSearch(Resource):
 
 
 @cron_namespace.route("/cron/search/incremental-stop")
-class IncrementalCatalogSearch(Resource):
+class IncrementalCatalogSearchStop(Resource):
 
     def create_parser_with_args(self):
         parser = reqparse.RequestParser()
-        parser.add_argument("domains", type=str, action='append')
-        parser.add_argument("cities", type=str, action='append')
+        parser.add_argument("domains", type=str, action='append', required=True, help='List of domains to search')
+        parser.add_argument("cities", type=str, action='append', required=True, help='List of cities to search')
         return parser.parse_args()
 
     @cron_namespace.doc(security='apikey')
+    @cron_namespace.expect(search_input_model)
     @token_required
     def post(self):
         args = self.create_parser_with_args()
@@ -93,7 +103,7 @@ class IncrementalCatalogSearch(Resource):
 
 
 @cron_namespace.route("/cron/search/full-and-incremental")
-class IncrementalCatalogSearch(Resource):
+class FullAndIncrementalSearch(Resource):
 
     @cron_namespace.doc(security='apikey')
     @token_required
